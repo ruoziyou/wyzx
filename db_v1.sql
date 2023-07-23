@@ -1,0 +1,34 @@
+CREATE DATABASE IF NOT EXISTS test1 CHARACTER SET utf8mb4;
+USE test1;
+
+CREATE TABLE IF NOT EXISTS user (
+  id INTEGER NOT NULL,
+  uuid TEXT NOT NULL,
+  state TEXT,
+  create_time TEXT NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS private (
+  id INTEGER NOT NULL,
+  ports INTEGER NOT NULL,
+  ggroup TEXT,
+  create_time TEXT NOT NULL,
+  note TEXT,
+  user_id INTEGER NOT NULL,
+  ip TEXT NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS public (
+  id INTEGER NOT NULL,
+  ports INTEGER NOT NULL,
+  servers TEXT,
+  create_time TEXT NOT NULL,
+  ip TEXT NOT NULL,
+  note TEXT,
+  user_id INTEGER NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (user_id) REFERENCES user (id)
+);
