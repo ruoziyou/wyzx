@@ -77,11 +77,11 @@ else:
     sheet.cell(1, 6).value = "外网"
     wb.save(export_file)
 
-    # 设置计数器（计数器设置为0是为了只在第一次输出DataFrame的时候打印header）
+    # 设置计数器（计数器设置为0是为了只在第一次输出DataFrame的时候输出header）
     counter = 0
 
     # 获取所有登记人和其日期
-    cursor.execute("SELECT create_time, id FROM user ORDER BY create_time")
+    cursor.execute("SELECT create_time, id, uuid FROM user ORDER BY create_time")
     user_info = cursor.fetchall()
 
     # 遍历全部登记人
@@ -98,9 +98,7 @@ else:
         lines = max(df_private.shape[0], df_public.shape[0])
 
         # 获取登记人信息并整合成对应行数的DataFrame
-        cursor.execute(f"SELECT uuid FROM user WHERE id = {user[1]}")
-        uuid = cursor.fetchone()
-        df_user = pd.DataFrame(((user[0], uuid[0]),) * lines, columns=["日期", "登记人"])
+        df_user = pd.DataFrame(((user[0], user[2]),) * lines, columns=["日期", "登记人"])
 
         # 输出登记人信息，内网数据，和外网数据到Excel表格里面
         with pd.ExcelWriter(export_file, mode="a", engine="openpyxl", if_sheet_exists="overlay") as writer:
